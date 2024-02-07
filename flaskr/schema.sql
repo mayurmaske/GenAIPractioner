@@ -29,3 +29,16 @@ create table product (
     price integer not null,
     description text not null
 );
+
+-- write code to create table 'cart' with following columns
+-- id: an integer primary key that auto-increments
+-- name: a text field for the name of the product, which cannot be null
+-- price: an integer field representing the price of the product, which cannot be null
+
+drop table if exists cart;
+create table cart (
+    id integer primary key autoincrement,
+    name text not null,
+    price integer not null
+);
+

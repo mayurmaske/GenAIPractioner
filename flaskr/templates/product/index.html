@@ -22,7 +22,36 @@
                 <td><img src="{{ product['url'] }}" alt="{{ product['name'] }}"></td>
                 <td>{{ product['price'] }}</td>
                 <td>{{ product['description'] }}</td>
-                <td><button>Add to Cart</button></td>
+                <td>
+                    <form action="/add_to_cart" method="post">
+                        <input type="hidden" name="name" value="{{ product['name'] }}">
+                        <input type="hidden" name="price" value="{{ product['price'] }}">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block cart_header %}
+  <h1>{% block cart_title %}Cart Items{% endblock %}</h1>
+{% endblock %}
+
+{% block cart_details %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item['name'] }}</td>
+                <td>{{ item['price'] }}</td>
             </tr>
         {% endfor %}
     </tbody>

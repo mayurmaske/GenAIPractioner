@@ -42,6 +42,10 @@ with navigation links and flash messages displayed as appropriate based on the u
             <div class="flash">{{ message }}</div>
         {% endfor %}
         {% block content %}{% endblock %}
+        <header>
+            {% block cart_header %}{% endblock %}
+        </header>
+        {% block cart_details %}{% endblock %}
     </section>
 </body>
 </html>

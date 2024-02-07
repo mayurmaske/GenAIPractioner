@@ -23,6 +23,9 @@ bp = Blueprint('product', __name__)
 # Pass the fetched product data to the render_template() function along with the template name 'product/index.html' and the variable name products.
 # Write Python code to implement these steps, encapsulate it within triple backticks, and include it in your response.
 
+# Update below code to get all 'items' from 'cart' database
+# pass fetched 'items' as argument to render template
+
 @bp.route('/')
 @login_required
 def index():
@@ -30,8 +33,28 @@ def index():
     products = db.execute(
         'SELECT * FROM product'
     ).fetchall()
-    return render_template('product/index.html', products=products)
+
+    items = db.execute(
+        'SELECT * FROM cart'
+    ).fetchall()
+
+    return render_template('product/index.html', products=products, items=items)
 
 
+@bp.route('/add_to_cart', methods=['POST'])
+@login_required
+def create():
+    name = request.form['name']
+    price = request.form['price']
+    error = None
+
+    db = get_db()
+    db.execute(
+        'INSERT INTO cart (name, price)'
+        ' VALUES (?, ?)',
+        (name, price)
+    )
+    db.commit()
+    return redirect(url_for('product.index'))
 
 
