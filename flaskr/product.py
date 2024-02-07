@@ -24,6 +24,7 @@ bp = Blueprint('product', __name__)
 # Write Python code to implement these steps, encapsulate it within triple backticks, and include it in your response.
 
 @bp.route('/')
+@login_required
 def index():
     db = get_db()
     products = db.execute(
