@@ -8,11 +8,11 @@ cursor = conn.cursor()
 
 # Sample data to insert into the table
 products = [
-    ('Laptop', './static/test1.jpg', 40000, 'Laptop with 8GB Ram/500 GB SSD'),
-    ('Smart Watch', './static/test1.jpg', 1500,'Smart watch with health tracker'),
-    ('Headsets', './static/test1.jpg', 1000, 'Wireless Bluetooth headsets'),
-	('Mobile', './static/test1.jpg', 20000, 'Andriod OS mobile'),
-	('iPad', './static/test1.jpg', 35000, 'iPad Mini with latest iOs')
+    ('Laptop', './static/laptop.jpg', 40000, 'Laptop with 8GB Ram/500 GB SSD'),
+    ('Smart Watch', './static/smart_watch.jpg', 1500,'Smart watch with health tracker'),
+    ('Headsets', './static/headsets.jpg', 1000, 'Wireless Bluetooth headsets'),
+	('Mobile', './static/mobile.jpg', 20000, 'Andriod OS mobile'),
+	('iPad', './static/ipad.jpg', 35000, 'iPad Mini with latest iOs')
 ]
 
 # Define the SQL query to insert records into the table

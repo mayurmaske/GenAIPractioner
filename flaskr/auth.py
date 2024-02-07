@@ -127,6 +127,13 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
+
+    # write code to connect to database and delete everything from 'cart' table
+    db = get_db()
+    db.execute('DELETE FROM cart')
+    db.commit()
+    db.close()    
+    
     return redirect(url_for('index'))
 
 # write a function to check if user is logged in
