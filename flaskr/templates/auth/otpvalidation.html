@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}OTP Validation{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <p>You will receive OTP on your mobile number shortly. Enter the OTP in given input box below</p> <!-- Added text below the header -->
+  <form method="post">
+    <label for="otp">Enter OTP</label>
+    <input name="otp" id="otp" required>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

@@ -68,6 +68,24 @@ def register():
 
     return render_template('auth/register.html')
 
+# create a route for 'otpvalidation' wih methods as 'GET' and 'POST'.
+# If a POST request is received then get the input 'otp' from form and check if it matches the stored 'otp'.
+# return redirect(url_for('index'))
+# If a GET request is received:
+# return render_template('auth/otpvalidation.html')
+# Ensure that this route is registered with the 'auth' blueprint and can be accessed at '/auth/otpvalidation' for user login functionality.
+
+@bp.route('/otpvalidation', methods=('GET', 'POST'))
+def otpvalidation():
+    if request.method == 'POST':
+        otp = int(request.form['otp'])
+        if otp == 1234:
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid OTP')
+    return render_template('auth/otpvalidation.html')
+
+
 # Create a route named '/login' within the 'auth' blueprint for handling user login functionality. This route should support both GET and POST HTTP methods. The route should include the following functionality:
 
 # When a POST request is received:
@@ -112,7 +130,9 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            # return redirect(url_for('index'))
+            return redirect(url_for('auth.otpvalidation'))
+            # return render_template('auth/otpvalidation.html')
 
         flash(error)
 
