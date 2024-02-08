@@ -22,7 +22,7 @@ create table user (
     id integer primary key autoincrement,
     username text not null,
     password text not null,
-    mobile_number integer not null
+    mobile_number text not null
 );
 create table product (
     id integer primary key autoincrement,

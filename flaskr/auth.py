@@ -14,6 +14,10 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 from .db import get_db
 import functools
+from twilio.rest import Client
+from dotenv import load_dotenv
+import random
+import os
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -41,7 +45,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        mobile_number = int(request.form['mobile'])
+        mobile_number = '+91' + str(request.form['mobile'])
         db = get_db()
         error = None
 
@@ -72,17 +76,44 @@ def register():
 # If a POST request is received then get the input 'otp' from form and check if it matches the stored 'otp'.
 # return redirect(url_for('index'))
 # If a GET request is received:
-# return render_template('auth/otpvalidation.html')
+# write a code to generate and send OTP to user's mobile number using twilio
 # Ensure that this route is registered with the 'auth' blueprint and can be accessed at '/auth/otpvalidation' for user login functionality.
 
 @bp.route('/otpvalidation', methods=('GET', 'POST'))
 def otpvalidation():
     if request.method == 'POST':
-        otp = int(request.form['otp'])
-        if otp == 1234:
+
+        entered_otp = int(request.form['otp'])
+        if entered_otp == session['otp']:
             return redirect(url_for('index'))
         else:
             flash('Invalid OTP')
+
+    # UNCOMMENT THE BELOW PART TO GENERATE OTP USING TWILIO SERVICE WHICH INCURS CHARGES FOR OTP GENERATION AND DISTRIBUTION
+    # BELOW PART IS TESTED WITH ACTUAL VERIFICATION. BYPASSING IT FOR FURTHER DEVELOPMENT.
+            
+    # # Load environment variables from .env file
+    # load_dotenv()
+
+    # # Your Twilio account SID and auth token. Load the details from .env file using dotenv
+    # account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    # auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    # twilio_phone_number = str(os.getenv('TWILIO_PHONE_NUMBER'))
+
+    # client = Client(account_sid, auth_token)
+    # # Generate a random 4-digit OTP
+    # otp = random.randint(1000, 9999)
+    # # Send the OTP to the user's mobile number
+    # message = client.messages.create(
+    #     to=session['mobile_number'],
+    #     from_=twilio_phone_number,
+    #     body=f'Your OTP is {otp}'
+    # )
+    # print(message.sid)
+    # session['otp'] = otp
+            
+    session['otp'] = 1234
+
     return render_template('auth/otpvalidation.html')
 
 
@@ -111,7 +142,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        mobile_number = int(request.form['mobile'])
         db = get_db()
         error = None
         user = db.execute(
@@ -122,14 +152,11 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
-        elif not mobile_number:
-            error = 'Mobile number is required.'
-        elif user['mobile_number'] != mobile_number:
-            error = 'Incorrect mobile number.'
 
         if error is None:
             session.clear()
             session['user_id'] = user['id']
+            session['mobile_number'] = user['mobile_number']
             # return redirect(url_for('index'))
             return redirect(url_for('auth.otpvalidation'))
             # return render_template('auth/otpvalidation.html')
