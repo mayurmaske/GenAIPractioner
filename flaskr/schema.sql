@@ -14,13 +14,15 @@
 -- url: A TEXT field for the URL of the product image, which cannot be null.
 -- price: An INTEGER field representing the price of the product, which cannot be null.
 -- description: A TEXT field for the description of the product, which cannot be null.
+-- add mobile_number column to user table
 
 drop table if exists user;
 drop table if exists product;
 create table user (
     id integer primary key autoincrement,
     username text not null,
-    password text not null
+    password text not null,
+    mobile_number integer not null
 );
 create table product (
     id integer primary key autoincrement,

@@ -31,11 +31,17 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Render the 'auth/register.html' template, passing any error message to be displayed using the 'flash' function.
 
+# update register function below to fetch 'mobile number' details from form. Check if 'mobile_number' set is not set.
+# If 'mobile_number' is not set, set an error message
+# If no error occurs, then insert 'mobile_number' alond with other details into database.
+# commit the changes to the database and redirect the user to the login page.
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        mobile_number = int(request.form['mobile'])
         db = get_db()
         error = None
 
@@ -43,6 +49,8 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not mobile_number:
+            error = 'Mobile number is required.'
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
@@ -50,8 +58,8 @@ def register():
 
         if error is None:
             db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO user (username, password, mobile_number) VALUES (?, ?, ?)',
+                (username, generate_password_hash(password), mobile_number)
             )
             db.commit()
             return redirect(url_for('auth.login'))
@@ -75,11 +83,17 @@ def register():
 # Render the 'auth/login.html' template, passing any error message to be displayed using the 'flash' function.
 # Ensure that this route is registered with the 'auth' blueprint and can be accessed at '/auth/login' for user login functionality.
 
+# update the below login function to take 'mobile number' as input. Check if 'mobile_number' is not set.
+# If 'mobile_number' is not set, set an error message
+# If no error occurs, then check if the 'mobile_number' provided matches the stored 'mobile_number' for the user.
+# If the 'mobile_number' matches, then clear the session, set the 'user_id' in the session to the user's ID, and redirect the user to the 'index' page.
+
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        mobile_number = int(request.form['mobile'])
         db = get_db()
         error = None
         user = db.execute(
@@ -90,6 +104,10 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
+        elif not mobile_number:
+            error = 'Mobile number is required.'
+        elif user['mobile_number'] != mobile_number:
+            error = 'Incorrect mobile number.'
 
         if error is None:
             session.clear()
