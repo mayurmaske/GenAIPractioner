@@ -116,6 +116,91 @@ def otpvalidation():
 
     return render_template('auth/otpvalidation.html')
 
+# create route for 'reset_password' with methods as as 'GET' and 'POST'.
+# If get request is received then return the render template for reset_password.html
+# If post request is received then get the input 'new_password' from form and update the password in database.
+
+@bp.route('/reset_password', methods=('GET', 'POST'))
+def reset_password():
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        print('===============================')
+        print(f'new_password = {new_password}')
+        print('===============================')
+        otp = int(request.form['otp'])
+
+        # check if received otp matches the stored otp
+        if otp != session['otp']:
+            print(f'otp = {otp} ({type(otp)})')
+            print(f"session['otp'] = {session['otp']} ({type(session['otp'])})")
+            flash('Invalid OTP')
+            return redirect(url_for('auth.reset_password'))
+
+        db = get_db()
+        db.execute(
+            'UPDATE user SET password = ? WHERE id = ?',
+            (generate_password_hash(new_password), session['user_id'])
+        )
+        db.commit()
+        return redirect(url_for('index'))
+
+    return render_template('auth/reset_password.html')
+
+
+
+# create a route for forget_password with methods as 'GET' and 'POST'.
+# return the render template for forget_password.html
+
+@bp.route('/forget_password', methods=('GET', 'POST'))
+def forget_password():
+    if request.method == 'POST':
+        username = request.form['username']
+        db = get_db()
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        else:
+            user = db.execute(
+                'SELECT * FROM user WHERE username = ?', (username,)
+            ).fetchone()
+            if not user:
+                error = 'User {} is not registered.'.format(username)
+
+        if error is None:
+            session.clear()
+
+            # UNCOMMENT THE BELOW PART TO GENERATE OTP USING TWILIO SERVICE WHICH INCURS CHARGES FOR OTP GENERATION AND DISTRIBUTION
+            # BELOW PART IS TESTED WITH ACTUAL VERIFICATION. BYPASSING IT FOR FURTHER DEVELOPMENT.
+                    
+            # # Load environment variables from .env file
+            # load_dotenv()
+
+            # # Your Twilio account SID and auth token. Load the details from .env file using dotenv
+            # account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+            # auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+            # twilio_phone_number = str(os.getenv('TWILIO_PHONE_NUMBER'))
+
+            # client = Client(account_sid, auth_token)
+            # # Generate a random 4-digit OTP
+            # otp = random.randint(1000, 9999)
+            # # Send the OTP to the user's mobile number
+            # message = client.messages.create(
+            #     to=user['mobile_number'],
+            #     from_=twilio_phone_number,
+            #     body=f'Your OTP is {otp}'
+            # )
+            # print(message.sid)
+            # session['otp'] = otp
+
+            session['otp'] = 1234
+            session['user_id'] = user['id']
+
+            return redirect(url_for('auth.reset_password'))
+
+        flash(error)
+
+    return render_template('auth/forget_password.html')
 
 # Create a route named '/login' within the 'auth' blueprint for handling user login functionality. This route should support both GET and POST HTTP methods. The route should include the following functionality:
 
