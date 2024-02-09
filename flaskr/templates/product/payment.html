@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Payment{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="payment-details">
+    <p>Total amount to pay: <b>{{ total_price }}</b> Rupees</p>    
+    
+    <form method="post">
+        <label for="upi-id">Enter your UPI ID below (Ex. XXXX@upi):</label>
+        <input type="text" id="upi-id" name="upi_id" required>
+        
+        <button id="process-payment" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}
+

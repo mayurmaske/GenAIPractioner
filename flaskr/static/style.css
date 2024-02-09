@@ -202,3 +202,20 @@ img {
 .total-price {
     margin-top: 20px; /* Adjust the value as needed */
 }
+
+#process-payment {
+    display: inline-block;
+    height: 50px;
+    font-weight: bold;
+    padding: 0.5em 1em; /* Optional: Add padding for better visual appearance */
+    /* Add any additional styling as needed */
+}
+
+#order-table {
+    border-collapse: collapse;
+    width: auto;
+}
+
+#order-table, #order-table th, #order-table td {
+    border: none;
+}

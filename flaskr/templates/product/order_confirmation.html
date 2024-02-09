@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Order Placed Successfully{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="order-details" id="order-details">
+    <h2>Dear {{ username }}, your Order Details are as follows</h2>
+    <p>Thank you for your purchase!</p>
+    
+    <table id="order-table">
+        <tr>
+            <td><strong>Payment ID:</strong></td>
+            <td id="payment-id">{{ payment_id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Payment Via:</strong></td>
+            <td id="payment-via">{{ upi_id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Total Price:</strong></td>
+            <td id="total-price">{{ total_price }} Rupees</td>
+        </tr>
+        <tr>
+            <td><strong>Address:</strong></td>
+            <td id="address">{{ address }}</td>
+        </tr>
+        <tr>
+            <td><strong>Pin Code:</strong></td>
+            <td id="pin-code">{{ pin_code }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

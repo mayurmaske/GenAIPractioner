@@ -241,6 +241,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
+            session['username'] = user['username']
             session['mobile_number'] = user['mobile_number']
             # return redirect(url_for('index'))
             return redirect(url_for('auth.otpvalidation'))
