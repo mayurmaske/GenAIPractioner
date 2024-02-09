@@ -1,25 +1,16 @@
-<!-- Create an HTML template for the Flaskr application layout. The template should include the following components:
-
-The document type declaration (<!doctype html>).
-A title for the webpage, which includes a placeholder for the title of the specific page (to be filled using template inheritance) followed by ' - Flaskr'.
-A link to an external stylesheet named 'style.css' located in the 'static' directory.
-A navigation section containing:
-The title of the application ('Flaskr') as a heading (<h1>).
-An unordered list (<ul>) with list items (<li>) containing links to various authentication-related routes:
-If a user is logged in (indicated by the presence of 'g.user'), display the username and a 'Log Out' link.
-If no user is logged in, display 'Register' and 'Log In' links.
-A content section (<section class="content">) containing:
-A header (<header>) with a placeholder for specific page headers (to be filled using template inheritance).
-Flash messages displayed as divs with the class 'flash' for styling.
-A placeholder for specific page content (to be filled using template inheritance).
-Ensure that this template provides a consistent layout for all pages of the Flaskr application,\
-with navigation links and flash messages displayed as appropriate based on the user's authentication status. -->
-
 <!doctype html>
 <html>
 <head>
     <title>{% block title %}{% endblock %} - GenAI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            /* Add other background properties if needed */
+        }
+    </style>
 </head>
 <body>
     <nav>
