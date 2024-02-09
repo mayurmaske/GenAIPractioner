@@ -58,3 +58,22 @@ def create():
     return redirect(url_for('product.index'))
 
 
+# create a route for 'checkout' wih methods as 'GET' and 'POST'.
+# If a POST request is received then add 'pass' to it which will be implemented further
+# If a GET request is received:
+#     Retrieve all 'items' from 'cart' database
+#     Pass fetched 'items' as argument to render template 'product/checkout.html'
+#     Return the rendered template
+
+@bp.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+    db = get_db()
+    items = db.execute(
+        'SELECT * FROM cart'
+    ).fetchall()
+
+    if request.method == 'POST':
+        pass
+    return render_template('product/checkout.html', items=items)
+
