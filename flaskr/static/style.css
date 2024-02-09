@@ -190,3 +190,15 @@ img {
     text-decoration: none;
     display: inline-block;
 }
+
+#proceed-to-payment {
+    display: inline-block;
+    height: 50px;
+    font-weight: bold;
+    padding: 0.5em 1em; /* Optional: Add padding for better visual appearance */
+    /* Add any additional styling as needed */
+}
+
+.total-price {
+    margin-top: 20px; /* Adjust the value as needed */
+}

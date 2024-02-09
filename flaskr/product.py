@@ -73,7 +73,16 @@ def checkout():
         'SELECT * FROM cart'
     ).fetchall()
 
+    # calculate the total price of all items in the cart using items['price'] 
+    # pass the total price to render template 'product/checkout.html'
+    # return the rendered template
+
+    total_price = 0
+    for item in items:
+        total_price += item['price']
+    
+
     if request.method == 'POST':
         pass
-    return render_template('product/checkout.html', items=items)
+    return render_template('product/checkout.html', items=items, total_price=total_price)
 
